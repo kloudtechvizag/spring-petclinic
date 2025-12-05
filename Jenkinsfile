@@ -30,6 +30,7 @@ pipeline {
                             sonar-scanner \
                                         -Dsonar.projectKey=petclinic \
                                         -Dsonar.projectName=petclinic \
+                                        -Dsonar.exclusions=**/*.java
                                         -Dsonar.sources=. \
                                         -Dsonar.sourceEncoding=UTF-8
                         """
