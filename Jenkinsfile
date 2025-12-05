@@ -5,7 +5,8 @@ pipeline {
         stage("BuildCode"){
             steps {
                 sh """
-                    ./mvnw package
+                    mvn clean package -DskipTests
+
                 """
             }
         }
@@ -13,7 +14,8 @@ pipeline {
         stage("Run-Unit-Tests"){
             steps {
                 sh """
-                    ./mvnw test
+                    mvn test
+
                 """
             }
         }
