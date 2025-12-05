@@ -6,6 +6,7 @@ pipeline {
             steps {
                 sh """
                     ./mvnw package -DskipTests
+                    ls -lrt target/*.jar
 
                 """
             }
