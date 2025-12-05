@@ -26,7 +26,6 @@ pipeline {
                script {
                     withSonarQubeEnv( installationName: 'dev-sonar-01', credentialsId: 'jenkins-sonar-creds') {
                         sh """
-                            cd food_order
                             sonar-scanner \
                                         -Dsonar.projectKey=petclinic \
                                         -Dsonar.projectName=petclinic \
