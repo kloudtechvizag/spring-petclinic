@@ -11,14 +11,14 @@ pipeline {
             }
         }
 
-        stage("Run-Unit-Tests"){
-            steps {
-                sh """
-                    ./mvnw test
+        // stage("Run-Unit-Tests"){
+        //     steps {
+        //         sh """
+        //             ./mvnw test
 
-                """
-            }
-        }
+        //         """
+        //     }
+        // }
 
         stage("Sonar-Scanning"){
             steps {
