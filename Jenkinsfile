@@ -53,38 +53,49 @@ pipeline {
             }
         }
 
-        // stage("Upload-Artifacts-Nexus"){
-        //     steps {
 
-        //         script {
-        //             def snapshotVersion = "1.0.0-${env.BUILD_NUMBER}-SNAPSHOT"
-        //             env.JAR_FILE_PATH = "${env.WORKSPACE}/food_order/dist/anagrams.jar"
-        //             echo "Uploading version: ${snapshotVersion}"
+        stage("Upload-Artifacts-Nexus") {
+            steps {
+                script {
+                    // Load Maven coordinates dynamically from pom.xml
+                    def pom = readMavenPom file: 'pom.xml'
+                    def groupId = pom.groupId ?: pom.parent.groupId
+                    def artifactId = pom.artifactId
+                    def version = pom.version
 
-        //             echo "Printing Jarfile Path: ${env.JAR_FILE_PATH}"
+                    // Optionally append Jenkins build number for snapshot version
+                    def snapshotVersion = version.replace('-SNAPSHOT', "-${env.BUILD_NUMBER}-SNAPSHOT")
 
-        //             nexusArtifactUploader(
-        //                 nexusVersion: 'nexus3',
-        //                 protocol: 'http',
-        //                 nexusUrl: 'nexus:8081',
-        //                 groupId: 'com.example',
-        //                 version: snapshotVersion,
-        //                 repository: 'maven-snapshots',
-        //                 credentialsId: 'nexus-creds',
-        //                 artifacts: [
-        //                     [
-        //                         artifactId: 'anagrams',
-        //                         file: env.JAR_FILE_PATH,
-        //                         type: "jar",
-        //                         classifier: ""
-        //                     ]
-        //                 ]
-        //             )
+                    // Path to the Maven-built JAR
+                    env.JAR_FILE_PATH = "${env.WORKSPACE}/target/${artifactId}-${version}.jar"
 
-        //         }
+                    echo "Uploading artifact:"
+                    echo "GroupId: ${groupId}"
+                    echo "ArtifactId: ${artifactId}"
+                    echo "Version: ${snapshotVersion}"
+                    echo "JAR Path: ${env.JAR_FILE_PATH}"
 
-        //     }
-        // }
+                    // Upload to Nexus
+                    // nexusArtifactUploader(
+                    //     nexusVersion: 'nexus3',
+                    //     protocol: 'http',
+                    //     nexusUrl: 'nexus:8081',
+                    //     groupId: groupId,
+                    //     version: snapshotVersion,
+                    //     repository: 'maven-snapshots',
+                    //     credentialsId: 'nexus-creds',
+                    //     artifacts: [
+                    //         [
+                    //             artifactId: artifactId,
+                    //             file: env.JAR_FILE_PATH,
+                    //             type: 'jar',
+                    //             classifier: ''
+                    //         ]
+                    //     ]
+                    // )
+                }
+            }
+        }
 
         // stage("Deploy-Dev"){
         //     steps {
