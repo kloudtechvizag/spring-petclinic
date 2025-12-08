@@ -57,23 +57,17 @@ pipeline {
         stage("Upload-Artifacts-Nexus") {
             steps {
                 script {
-                    // Load Maven coordinates dynamically from pom.xml
-                    def pom = readMavenPom file: 'pom.xml'
-                    def groupId = pom.groupId ?: pom.parent.groupId
-                    def artifactId = pom.artifactId
-                    def version = pom.version
-
-                    // Optionally append Jenkins build number for snapshot version
-                    def snapshotVersion = version.replace('-SNAPSHOT', "-${env.BUILD_NUMBER}-SNAPSHOT")
-
+                   
                     // Path to the Maven-built JAR
                     env.JAR_FILE_PATH = "${env.WORKSPACE}/target/${artifactId}-${version}.jar"
 
-                    echo "Uploading artifact:"
-                    echo "GroupId: ${groupId}"
-                    echo "ArtifactId: ${artifactId}"
-                    echo "Version: ${snapshotVersion}"
+                    def pom = new XmlSlurper().parse(new File("${env.WORKSPACE}/pom.xml"))
+                    def groupId = pom.groupId.text() ?: pom.parent.groupId.text()
+                    def artifactId = pom.artifactId.text()
+                    def version = pom.version.text()
+                    echo "GroupId: ${groupId}, ArtifactId: ${artifactId}, Version: ${version}"
                     echo "JAR Path: ${env.JAR_FILE_PATH}"
+
 
                     // Upload to Nexus
                     // nexusArtifactUploader(
