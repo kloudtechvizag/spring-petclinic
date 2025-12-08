@@ -58,13 +58,14 @@ pipeline {
             steps {
                 script {
                    
-                    // Path to the Maven-built JAR
-                    env.JAR_FILE_PATH = "${env.WORKSPACE}/target/${artifactId}-${version}.jar"
+                   
 
                     def pom = new XmlSlurper().parse(new File("${env.WORKSPACE}/pom.xml"))
                     def groupId = pom.groupId.text() ?: pom.parent.groupId.text()
                     def artifactId = pom.artifactId.text()
                     def version = pom.version.text()
+                    // Path to the Maven-built JAR
+                    env.JAR_FILE_PATH = "${env.WORKSPACE}/target/${artifactId}-${version}.jar"
                     echo "GroupId: ${groupId}, ArtifactId: ${artifactId}, Version: ${version}"
                     echo "JAR Path: ${env.JAR_FILE_PATH}"
 
