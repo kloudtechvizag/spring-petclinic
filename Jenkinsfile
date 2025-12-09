@@ -71,23 +71,23 @@ pipeline {
 
 
                     // Upload to Nexus
-                    // nexusArtifactUploader(
-                    //     nexusVersion: 'nexus3',
-                    //     protocol: 'http',
-                    //     nexusUrl: 'nexus:8081',
-                    //     groupId: groupId,
-                    //     version: snapshotVersion,
-                    //     repository: 'maven-snapshots',
-                    //     credentialsId: 'nexus-creds',
-                    //     artifacts: [
-                    //         [
-                    //             artifactId: artifactId,
-                    //             file: env.JAR_FILE_PATH,
-                    //             type: 'jar',
-                    //             classifier: ''
-                    //         ]
-                    //     ]
-                    // )
+                    nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        nexusUrl: 'nexus:8081',
+                        groupId: groupId,
+                        version: version,
+                        repository: 'maven-snapshots',
+                        credentialsId: 'nexus-creds',
+                        artifacts: [
+                            [
+                                artifactId: artifactId,
+                                file: env.JAR_FILE_PATH,
+                                type: 'jar',
+                                classifier: ''
+                            ]
+                        ]
+                    )
                 }
             }
         }
