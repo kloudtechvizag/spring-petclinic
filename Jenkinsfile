@@ -69,7 +69,8 @@ pipeline {
                     echo "GroupId: ${groupId}, ArtifactId: ${artifactId}, Version: ${version}"
                     echo "JAR Path: ${env.JAR_FILE_PATH}"
 
-
+                    // Remove pom object so it won't be serialized
+                    pom = null
                     // Upload to Nexus
                     nexusArtifactUploader(
                         nexusVersion: 'nexus3',
@@ -92,15 +93,15 @@ pipeline {
             }
         }
 
-        // stage("Deploy-Dev"){
-        //     steps {
-        //         sshagent(['jenkins-aws-ssh-creds']) {
-        //             sh """
-        //                 scp -o StrictHostKeyChecking=no ${env.JAR_FILE_PATH} ubuntu@65.0.251.218:/home/ubuntu
-        //             """
-        //         }
-        //     }
-        // }
+        stage("Deploy-Dev"){
+            steps {
+                sshagent(['jenkins-aws-ssh-creds']) {
+                    sh """
+                        scp -o StrictHostKeyChecking=no ${env.JAR_FILE_PATH} ubuntu@65.0.251.218:/home/ubuntu
+                    """
+                }
+            }
+        }
 
         // stage("Deploy-UAT"){
         //     steps {
