@@ -97,7 +97,7 @@ pipeline {
             steps {
                 sshagent(['jenkins-aws-ssh-creds']) {
                     sh """
-                        scp -o StrictHostKeyChecking=no ${env.JAR_FILE_PATH} ubuntu@65.0.251.218:/home/ubuntu
+                        scp -o StrictHostKeyChecking=no ${env.JAR_FILE_PATH} ubuntu@43.204.149.225:/home/ubuntu
                     """
                 }
             }
